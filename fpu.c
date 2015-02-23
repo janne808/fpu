@@ -1,7 +1,7 @@
 // fpu routines
 
 /*
- *  (C) 2014 Janne Heikkarainen <janne.heikkarainen@tut.fi>
+ *  (C) 2015 Janne Heikkarainen <janne.heikkarainen@student.tut.fi>
  *
  *  All rights reserved.
  *
@@ -54,20 +54,20 @@
 #define FRAMESKIP 2
 
 // graphics scale up factor
-#define SCALE 2
+#define SCALE 4
 
 // minimum and maximum geometries
 #define XMIN -1.0
 #define XMAX 1.0
 
 // number of oscillators per dimension
-#define NUM 256
+#define NUM 128
 
 // time step factor
 #define DT 8.0
 
 // nonlinear factor
-#define BETA 25.0
+#define BETA 5.0
 
 struct thread_data thread_data_array[NUM_THREADS];
 

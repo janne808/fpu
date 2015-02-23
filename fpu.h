@@ -1,7 +1,7 @@
 // fpu headers
 
 /*
- *  (C) 2014 Janne Heikkarainen <janne.heikkarainen@tut.fi>
+ *  (C) 2015 Janne Heikkarainen <janne.heikkarainen@student.tut.fi>
  *
  *  All rights reserved.
  *
