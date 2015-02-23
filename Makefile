@@ -16,7 +16,7 @@ else
 endif
 
 ifeq ($(SDL),1)
-	CFLAGS=-O$(OPTIMIZATION_LEVEL) -lm -lrt -lsndfile -ltiff `sdl-config --libs`
+	CFLAGS=-O$(OPTIMIZATION_LEVEL) -DSDL=$(SDL) -lm -lrt -lsndfile -ltiff `sdl-config --libs`
 else
 	CFLAGS=-O$(OPTIMIZATION_LEVEL) -lm -lrt -lsndfile
 endif

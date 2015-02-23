@@ -39,7 +39,9 @@
 #include <string.h>
 #include <time.h>
 
+#if SDL
 #include <SDL.h>
+#endif
 
 #if TIFF_ENABLE
 #include <tiffio.h>
@@ -67,7 +69,7 @@
 #define DT 8.0
 
 // nonlinear factor
-#define BETA 5.0
+#define BETA 4.0
 
 struct thread_data thread_data_array[NUM_THREADS];
 
@@ -210,9 +212,6 @@ int main(int argc, char *argv[])
   int ii;
   int jj;
   int tt;
-  int ii2;
-  int jj2;
-
   int steps;
 
   // lattice point coordinate vectors
@@ -240,10 +239,17 @@ int main(int argc, char *argv[])
   // nonlinear factor variable
   double beta=BETA;
 
+#if SDL
   // SDL variables
   SDL_Surface *screen;
   SDL_Event event;
   Uint8 *pixels;
+
+  // SDL loop variables
+  int ii2;
+  int jj2;
+#endif
+
   int done;
 
   // posix thread variables
@@ -282,10 +288,12 @@ int main(int argc, char *argv[])
   }
 #endif
 
+#if SDL
   // open a SDL window
   SDL_Init(SDL_INIT_VIDEO);
   screen = SDL_SetVideoMode(SCALE*NUM, SCALE*NUM, 24, SDL_SWSURFACE);
   SDL_WM_SetCaption("FPU", "FPU");
+#endif
 
   // allocate lattice coordinate vectors
   x=(double *)malloc(NUM*NUM*sizeof(double));
@@ -340,7 +348,7 @@ int main(int argc, char *argv[])
       if(d<1.0)
 	c[jj*NUM+ii]=1.0;
       else
-	c[jj*NUM+ii]=0.0;	
+	c[jj*NUM+ii]=1.0;	
     }
   }
 
@@ -367,6 +375,7 @@ int main(int argc, char *argv[])
 #endif
 
   while(!done){
+#if SDL
     // check for SDL event
     if (SDL_PollEvent(&event)) {
       switch (event.type) {
@@ -376,6 +385,7 @@ int main(int argc, char *argv[])
 	break;
       }
     }
+#endif
 
     // create integration threads
     pthread_attr_init(&attr);
@@ -424,6 +434,7 @@ int main(int argc, char *argv[])
       // timer stop
       clock_gettime(CLOCK_MONOTONIC, &time2);
 
+#if SDL
       pixels=(Uint8 *)screen->pixels;
       SDL_LockSurface(screen);
       for(jj=0; jj<NUM; jj++){
@@ -449,6 +460,7 @@ int main(int argc, char *argv[])
       }
       SDL_UnlockSurface(screen);
       SDL_Flip(screen);
+#endif
 
       timediff(time1, time2, &int_time);
 
@@ -492,8 +504,10 @@ int main(int argc, char *argv[])
   free(u1);
   free(u0);
 
+#if SDL
   // clean up SDL
   SDL_Quit();
+#endif
 
   return 0;
 }
