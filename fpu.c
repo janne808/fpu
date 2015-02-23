@@ -21,12 +21,6 @@
  *  along with Fpu.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// wave writer enable
-#define WAV_ENABLE 0
-
-// tiff writer enable
-#define TIFF_ENABLE 0
-
 #include <pthread.h>
 
 #if WAV_ENABLE
@@ -370,7 +364,7 @@ int main(int argc, char *argv[])
   tt=0;
   steps=0;
 
-#if TIFF_FRAME
+#if TIFF_ENABLE
   tiff_frame=0;
 #endif
 

@@ -1,5 +1,7 @@
 # compile flags
 SDL=1
+WAV_ENABLE=0
+TIFF_ENABLE=0
 OPTIMIZATION_LEVEL=3
 
 # object files
@@ -8,24 +10,36 @@ OBJ=fpu.o
 # compilers
 CC=gcc
 
-# compiler options
+# SDL options
 ifeq ($(SDL),1)
-	OPTS=-Wall -pthread `sdl-config --cflags`
+	SDL_OPTS=-DSDL=1 `sdl-config --libs` `sdl-config --cflags`
 else
-	OPTS=-Wall -pthread
+	SDL_OPTS=
 endif
 
-ifeq ($(SDL),1)
-	CFLAGS=-O$(OPTIMIZATION_LEVEL) -DSDL=$(SDL) -lm -lrt -lsndfile -ltiff `sdl-config --libs`
+# sndfile options
+ifeq ($(WAV_ENABLE),1)
+	SNDFILE_OPTS=-DWAV_ENABLE=1 -lsndfile
 else
-	CFLAGS=-O$(OPTIMIZATION_LEVEL) -lm -lrt -lsndfile
+	SNDFILE_OPTS=
 endif
+
+# TIFFLib options
+ifeq ($(TIFF_ENABLE),1)
+	TIFFLIB_OPTS=-DTIFF_ENABLE=1 -ltiff
+else
+	TIFFLIB_OPTS=
+endif
+
+# compiler options
+OPTS=-Wall -pthread
+CFLAGS=-O$(OPTIMIZATION_LEVEL) -lm -lrt
 
 fpu: 	$(OBJ)
-	$(CC) -o $@ $+ $(OPTS) $(CFLAGS) 
+	$(CC) -o $@ $+ $(OPTS) $(CFLAGS) $(SDL_OPTS) $(SNDFILE_OPTS) $(TIFFLIB_OPTS)
 
 fpu.o:	fpu.c
-	$(CC) $(OPTS) $(CFLAGS) -c $<
+	$(CC) $(OPTS) $(CFLAGS) $(SDL_OPTS) $(SNDFILE_OPTS) $(TIFFLIB_OPTS) -c $<
 
 .PHONY: clean
 clean:
